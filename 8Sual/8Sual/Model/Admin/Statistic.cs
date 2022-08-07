@@ -1,4 +1,4 @@
-﻿namespace _8Sual.Model
+﻿namespace _8Sual.Model.Admin
 {
     public class Statistic
     {
