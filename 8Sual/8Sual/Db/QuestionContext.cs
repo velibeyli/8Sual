@@ -6,7 +6,7 @@ namespace _8Sual.Db
 {
     public class QuestionContext : DbContext
     {
-        public QuestionContext(DbContextOptions options) 
+        public QuestionContext(DbContextOptions<QuestionContext> options) 
             : base(options)
         {
 
@@ -15,5 +15,9 @@ namespace _8Sual.Db
         public DbSet<Statistic> Statistic { get; set; }
         public DbSet<Winner> Winner { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<QuestionAnswer> QuestionAnswer { get; set; }
+
     }
 }
