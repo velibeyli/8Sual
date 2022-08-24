@@ -8,6 +8,5 @@ namespace _8Sual.Model
         public string AnswerContent { get; set; }
         [JsonIgnore]
         public Question Question { get; set; }
-        public int QuestionId { get; set; }
     }
 }

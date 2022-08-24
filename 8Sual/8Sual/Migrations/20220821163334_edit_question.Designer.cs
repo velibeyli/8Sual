@@ -12,8 +12,8 @@ using _8Sual.Db;
 namespace _8Sual.Migrations
 {
     [DbContext(typeof(QuestionContext))]
-    [Migration("20220807131724_create_question")]
-    partial class create_question
+    [Migration("20220821163334_edit_question")]
+    partial class edit_question
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -102,9 +102,6 @@ namespace _8Sual.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
@@ -244,8 +241,7 @@ namespace _8Sual.Migrations
 
             modelBuilder.Entity("_8Sual.Model.Question", b =>
                 {
-                    b.Navigation("Answer")
-                        .IsRequired();
+                    b.Navigation("Answer");
                 });
 #pragma warning restore 612, 618
         }

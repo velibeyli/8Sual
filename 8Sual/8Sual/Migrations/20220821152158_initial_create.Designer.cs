@@ -12,8 +12,8 @@ using _8Sual.Db;
 namespace _8Sual.Migrations
 {
     [DbContext(typeof(QuestionContext))]
-    [Migration("20220807133101_remove_questionid")]
-    partial class remove_questionid
+    [Migration("20220821152158_initial_create")]
+    partial class initial_create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -119,7 +119,7 @@ namespace _8Sual.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -216,9 +216,7 @@ namespace _8Sual.Migrations
                 {
                     b.HasOne("_8Sual.Model.Category", "Category")
                         .WithMany("Questions")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });
@@ -241,8 +239,7 @@ namespace _8Sual.Migrations
 
             modelBuilder.Entity("_8Sual.Model.Question", b =>
                 {
-                    b.Navigation("Answer")
-                        .IsRequired();
+                    b.Navigation("Answer");
                 });
 #pragma warning restore 612, 618
         }

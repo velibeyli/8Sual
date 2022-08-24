@@ -22,7 +22,7 @@ namespace _8Sual.Controllers.Admin
              Ok(await _service.GetAll());
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateUser(AdminUser adminUser) =>
+        public async Task<ActionResult<AdminUser>> CreateUser(AdminUser adminUser) =>
             Ok(await _service.Create(adminUser));
 
         [HttpPost("update")]

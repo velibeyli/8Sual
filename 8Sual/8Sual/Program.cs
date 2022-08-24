@@ -10,12 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
-{
-    options.SerializerSettings.ContractResolver =
-                                 new DefaultContractResolver();
-});
-;
+builder.Services.AddControllers();
+//    AddNewtonsoftJson(options =>
+//{
+//    options.SerializerSettings.ContractResolver =
+//                                 new DefaultContractResolver();
+//});
+//
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IAdminUserRepository, AdminUserRepository>();

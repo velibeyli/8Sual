@@ -6,11 +6,7 @@ namespace _8Sual.Db
 {
     public class QuestionContext : DbContext
     {
-        public QuestionContext(DbContextOptions<QuestionContext> options) 
-            : base(options)
-        {
-
-        }
+        public QuestionContext(DbContextOptions<QuestionContext> options) : base(options) { }
         public DbSet<AdminUser> AdminUser { get; set; }
         public DbSet<Statistic> Statistic { get; set; }
         public DbSet<Winner> Winner { get; set; }
