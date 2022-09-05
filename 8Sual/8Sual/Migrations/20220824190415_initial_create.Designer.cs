@@ -12,8 +12,8 @@ using _8Sual.Db;
 namespace _8Sual.Migrations
 {
     [DbContext(typeof(QuestionContext))]
-    [Migration("20220821163334_edit_question")]
-    partial class edit_question
+    [Migration("20220824190415_initial_create")]
+    partial class initial_create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,11 +33,9 @@ namespace _8Sual.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -100,7 +98,6 @@ namespace _8Sual.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Score")
@@ -119,30 +116,31 @@ namespace _8Sual.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AnswerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FourthAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecondAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ThirdAnswer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnswerId")
+                        .IsUnique();
 
                     b.HasIndex("CategoryId");
 
@@ -158,16 +156,9 @@ namespace _8Sual.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AnswerContent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionId")
-                        .IsUnique();
 
                     b.ToTable("QuestionAnswer");
                 });
@@ -181,19 +172,15 @@ namespace _8Sual.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -214,24 +201,21 @@ namespace _8Sual.Migrations
 
             modelBuilder.Entity("_8Sual.Model.Question", b =>
                 {
+                    b.HasOne("_8Sual.Model.QuestionAnswer", "Answer")
+                        .WithOne("Question")
+                        .HasForeignKey("_8Sual.Model.Question", "AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("_8Sual.Model.Category", "Category")
                         .WithMany("Questions")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Answer");
+
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("_8Sual.Model.QuestionAnswer", b =>
-                {
-                    b.HasOne("_8Sual.Model.Question", "Question")
-                        .WithOne("Answer")
-                        .HasForeignKey("_8Sual.Model.QuestionAnswer", "QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("_8Sual.Model.Category", b =>
@@ -239,9 +223,9 @@ namespace _8Sual.Migrations
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("_8Sual.Model.Question", b =>
+            modelBuilder.Entity("_8Sual.Model.QuestionAnswer", b =>
                 {
-                    b.Navigation("Answer");
+                    b.Navigation("Question");
                 });
 #pragma warning restore 612, 618
         }

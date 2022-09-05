@@ -15,8 +15,8 @@ namespace _8Sual.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,12 +29,25 @@ namespace _8Sual.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Score = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestionAnswer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnswerContent = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuestionAnswer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,10 +71,10 @@ namespace _8Sual.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,12 +87,13 @@ namespace _8Sual.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SecondAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThirdAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FourthAnswer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: true)
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecondAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThirdAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FourthAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    AnswerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,7 +102,14 @@ namespace _8Sual.Migrations
                         name: "FK_Question_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Question_QuestionAnswer_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "QuestionAnswer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,36 +133,16 @@ namespace _8Sual.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "QuestionAnswer",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AnswerContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuestionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuestionAnswer", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_QuestionAnswer_Question_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Question",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Question_AnswerId",
+                table: "Question",
+                column: "AnswerId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Question_CategoryId",
                 table: "Question",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuestionAnswer_QuestionId",
-                table: "QuestionAnswer",
-                column: "QuestionId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Winner_UserId",
@@ -155,7 +156,7 @@ namespace _8Sual.Migrations
                 name: "AdminUser");
 
             migrationBuilder.DropTable(
-                name: "QuestionAnswer");
+                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "Statistic");
@@ -164,13 +165,13 @@ namespace _8Sual.Migrations
                 name: "Winner");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "QuestionAnswer");
 
             migrationBuilder.DropTable(
                 name: "User");
-
-            migrationBuilder.DropTable(
-                name: "Category");
         }
     }
 }

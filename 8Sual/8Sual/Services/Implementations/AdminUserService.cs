@@ -1,7 +1,9 @@
-﻿using _8Sual.Model;
+﻿using _8Sual.DTO;
+using _8Sual.Model;
 using _8Sual.Model.Admin;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
+using _8Sual.Wrappers;
 
 namespace _8Sual.Services.Implementations
 {
@@ -13,44 +15,59 @@ namespace _8Sual.Services.Implementations
             _repo = repo;
         }
 
-        public async Task<AdminUser> Create(AdminUser adminUser)
+        public async Task<AdminUserDTO> Create(AdminUserDTO adminUserDto)
         {
-            return await _repo.Create(adminUser);
+            AdminUser adminUser = new AdminUser()
+            {
+                Username = adminUserDto.Username,
+                Password = adminUserDto.Password
+            };
+
+            var admin = await _repo.Create(adminUser);
+            return new AdminUserDTO(admin);
         }
 
-        public async Task<AdminUser> DeleteById(int id)
+        public async Task<AdminUserDTO> DeleteById(int id)
         {
             var res = await _repo.GetById(x => x.Id == id);
             if (res is null)
                 throw new Exception("User not found");
 
             var deletedUser = await _repo.Delete(res);
-            return deletedUser;
+            return new AdminUserDTO(deletedUser);
         }
 
-        public async Task<IEnumerable<AdminUser>> GetAll()
+        public async Task<ServiceResponse<IEnumerable<AdminUserDTO>>> GetAll()
         {
-            return await _repo.GetAll();
+            List<AdminUser> admins = await _repo.GetAll();
+            var data = admins.Select(x => new AdminUserDTO(x)).ToList();
+            return new ServiceResponse<IEnumerable<AdminUserDTO>>(data) { Message = "Data query success",StatusCode = 2000};
         }
 
-        public async Task<AdminUser> GetById(int id)
-        {
-            var result = await _repo.GetById(x => x.Id == id);
-            if (result is null)
-                throw new Exception("User not found");
-            return result;
-        }
-
-        public async Task<AdminUser> Update(int id, AdminUser adminUser)
+        public async Task<AdminUserDTO> GetById(int id)
         {
             var result = await _repo.GetById(x => x.Id == id);
             if (result is null)
                 throw new Exception("User not found");
 
-            result.Username = adminUser.Username;
-            result.Password = adminUser.Password;
+            return new AdminUserDTO(result);
+        }
 
-            return await _repo.Update(result);
+        public async Task<AdminUserDTO> Update(int id, AdminUserDTO adminUserDto)
+        {
+            var result = await _repo.GetById(x => x.Id == id);
+            if (result is null)
+                throw new Exception("User not found");
+
+            AdminUser admin = new AdminUser()
+            {
+                Username = adminUserDto.Username,
+                Password = adminUserDto.Password
+            };
+
+            var updatedAdmin = await _repo.Update(admin);
+
+            return new AdminUserDTO(updatedAdmin);
         }
     }
 }
