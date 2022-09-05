@@ -12,7 +12,6 @@ namespace _8Sual.DTO
         public int CategoryId { get; set; }
         public int AnswerId { get; set; }
         public string AnswerContent { get; set; }
-
         public QuestionDTO(Question question)
         {
             Content = question.Content;
@@ -22,6 +21,7 @@ namespace _8Sual.DTO
             FourthAnswer = question.FourthAnswer;
             AnswerId = question.AnswerId;
             CategoryId = question.CategoryId;
+            AnswerContent = question.Answer.AnswerContent;
         }
     }
 }
