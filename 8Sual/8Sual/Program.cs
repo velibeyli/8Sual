@@ -4,7 +4,6 @@ using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Implementations;
 using _8Sual.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +31,7 @@ builder.Services.AddScoped<IAdminUserService, AdminUserService>();
 builder.Services.AddScoped<IStatisticService, StatisticService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -21,7 +21,6 @@ namespace _8Sual.DTO
             FourthAnswer = question.FourthAnswer;
             AnswerId = question.AnswerId;
             CategoryId = question.CategoryId;
-            AnswerContent = question.Answer.AnswerContent;
         }
     }
 }

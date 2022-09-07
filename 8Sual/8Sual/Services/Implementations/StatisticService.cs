@@ -14,12 +14,15 @@ namespace _8Sual.Services.Implementations
             _repo = repo;
         }
 
-        public async Task<StatisticDTO> Create(StatisticDTO statisticDto)
+        public async Task<ServiceResponse<StatisticDTO>> Create(StatisticDTO statisticDto)
         {
-            var result = await _repo.GetAll(x => x.Gamedate == statisticDto.Gamedate);
-            if (result.Count > 0)
-                throw new Exception("There is no any statistic in this game date in database");
-
+            var result = await _repo.GetByFilter(x => x.Gamedate == statisticDto.Gamedate);
+            var resultDto = new StatisticDTO(result);
+            if (result is not null)
+            {
+                return new ServiceResponse<StatisticDTO>(resultDto)
+                { Message = "There is such statistic in this game date in database", StatusCode = 4000 };
+            }
             Statistic statistics = new Statistic()
             {
                 Gamedate = statisticDto.Gamedate,
@@ -28,7 +31,9 @@ namespace _8Sual.Services.Implementations
             };
 
             var createdStatistic = await _repo.Create(statistics);
-            return new StatisticDTO(createdStatistic);
+            var createdStatisticDto = new StatisticDTO(createdStatistic);
+            return new ServiceResponse<StatisticDTO>(createdStatisticDto) 
+            { Message = "Successfully created statistic",StatusCode = 2001};
         }
 
         public async Task<ServiceResponse<IEnumerable<StatisticDTO>>> GetAll()
@@ -39,13 +44,17 @@ namespace _8Sual.Services.Implementations
             { Message = "Data query success", StatusCode = 2000 };
         }
 
-        public async Task<StatisticDTO> GetById(int id)
+        public async Task<ServiceResponse<StatisticDTO>> GetById(int id)
         {
-            var result = await _repo.GetById(x => x.Id == id);
+            var result = await _repo.GetByFilter(x => x.Id == id);
             if (result is null)
-                throw new Exception("Statistic not found");
+            {
+                return new ServiceResponse<StatisticDTO>(null)
+                { Message = "Statistic with this id not found", StatusCode = 4000 };
+            }
 
-            return new StatisticDTO(result);
+            var resultDto = new StatisticDTO(result);
+            return new ServiceResponse<StatisticDTO>(resultDto) { Message = "Successfully operation",StatusCode = 2000};
         }
     }
 }

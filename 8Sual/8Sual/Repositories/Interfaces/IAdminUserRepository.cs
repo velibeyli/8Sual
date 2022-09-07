@@ -1,5 +1,4 @@
-﻿using _8Sual.Model;
-using _8Sual.Model.Admin;
+﻿using _8Sual.Model.Admin;
 
 namespace _8Sual.Repositories.Interfaces
 {

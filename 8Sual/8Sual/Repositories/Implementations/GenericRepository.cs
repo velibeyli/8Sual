@@ -15,8 +15,8 @@ namespace _8Sual.Repositories.Implementations
 
         public async Task<T> Create(T entity)
         {
-             await _context.Set<T>().AddAsync(entity);
-             await _context.SaveChangesAsync();
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -35,7 +35,7 @@ namespace _8Sual.Repositories.Implementations
 
         }
 
-        public async Task<T> GetById(Expression<Func<T, bool>> filter = default)
+        public async Task<T> GetByFilter(Expression<Func<T, bool>> filter = default)
         {
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
             if (filter is not null) query = query.Where(filter);
@@ -46,7 +46,7 @@ namespace _8Sual.Repositories.Implementations
         public async Task<T> Update(T entity)
         {
             _context.Set<T>().Update(entity);
-             await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
     }

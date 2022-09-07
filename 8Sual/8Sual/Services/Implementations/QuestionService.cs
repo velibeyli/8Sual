@@ -1,7 +1,6 @@
 ﻿using _8Sual.DTO;
 using _8Sual.Model;
 using _8Sual.Repositories.Interfaces;
-using _8Sual.RequestModel;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
 
@@ -10,17 +9,22 @@ namespace _8Sual.Services.Implementations
     public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _repo;
-        public QuestionService(IQuestionRepository repo)
+        private readonly ICategoryRepository _categoryRepository;
+        public QuestionService(IQuestionRepository repo, ICategoryRepository categoryRepository)
         {
             _repo = repo;
+            _categoryRepository = categoryRepository;
         }
 
-        public async Task<QuestionDTO> Create(QuestionDTO questionDto)
+        public async Task<ServiceResponse<QuestionDTO>> Create(QuestionDTO questionDto)
         {
-            var result = await _repo.GetAll(x => x.Content == questionDto.Content);
-            if (result.Count > 0)
-                throw new Exception("Databazada bu sual movcuddur");
-
+            var result = await _repo.GetByFilter(x => x.Content == questionDto.Content);
+            var resultDto = new QuestionDTO(result);
+            if (result != null)
+            {
+                return new ServiceResponse<QuestionDTO>(resultDto)
+                { Message = "There is already a question with this content in database", StatusCode = 4000 };
+            }
             QuestionAnswer answer = new QuestionAnswer()
             {
                 AnswerContent = questionDto.AnswerContent
@@ -39,7 +43,9 @@ namespace _8Sual.Services.Implementations
             };
 
             var createdQuestion = await _repo.Create(quest);
-            return new QuestionDTO(createdQuestion);
+            var createdQuestionDto = new QuestionDTO(createdQuestion);
+            return new ServiceResponse<QuestionDTO>(createdQuestionDto)
+            { Message = "Successfully created question",StatusCode = 2001};
         }
 
         public async Task<ServiceResponse<IEnumerable<QuestionDTO>>> GetAll()
@@ -50,13 +56,18 @@ namespace _8Sual.Services.Implementations
             { Message = "Data query success", StatusCode = 2000 };
         }
 
-        public async Task<QuestionDTO> GetById(int id)
+        public async Task<ServiceResponse<QuestionDTO>> GetById(int id)
         {
-            var result = await _repo.GetById(x => x.Id == id);
+            var result = await _repo.GetByFilter(x => x.Id == id);
             if (result is null)
-                throw new Exception("Question not found");
+            {
+                return new ServiceResponse<QuestionDTO>(null)
+                { Message = "Question not found", StatusCode = 4000 };
+            }
 
-            return new QuestionDTO(result);
+            var resultDto = new QuestionDTO(result);
+            return new ServiceResponse<QuestionDTO>(resultDto)
+            { Message = "Successfully operation"};
         }
     }
 }

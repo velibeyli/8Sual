@@ -1,7 +1,6 @@
 ﻿using _8Sual.DTO;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _8Sual.Controllers.Admin
@@ -21,11 +20,11 @@ namespace _8Sual.Controllers.Admin
             Ok(await _service.GetAll());
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<StatisticDTO>> GetById(int id) =>
+        public async Task<ActionResult<ServiceResponse<StatisticDTO>>> GetById(int id) =>
             (await _service.GetById(id));
 
         [HttpPost]
-        public async Task<ActionResult<StatisticDTO>> Create(StatisticDTO statisticDto) =>
+        public async Task<ActionResult<ServiceResponse<StatisticDTO>>> Create(StatisticDTO statisticDto) =>
             Ok(await _service.Create(statisticDto));
     }
 }

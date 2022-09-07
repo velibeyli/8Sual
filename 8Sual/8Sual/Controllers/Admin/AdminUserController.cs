@@ -1,10 +1,6 @@
 ﻿using _8Sual.DTO;
-using _8Sual.Model;
-using _8Sual.Model.Admin;
-using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _8Sual.Controllers.Admin
@@ -24,19 +20,19 @@ namespace _8Sual.Controllers.Admin
              Ok(await _service.GetAll());
 
         [HttpPost("create")]
-        public async Task<ActionResult<AdminUserDTO>> CreateUser(AdminUserDTO adminUserDto) =>
+        public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> CreateUser(AdminUserDTO adminUserDto) =>
             Ok(await _service.Create(adminUserDto));
 
         [HttpPost("update")]
-        public async Task<ActionResult<AdminUserDTO>> UpdateUser(int id, [FromBody] AdminUserDTO adminUserDto) =>
+        public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> UpdateUser(int id, [FromBody] AdminUserDTO adminUserDto) =>
             Ok(await _service.Update(id, adminUserDto));
 
         [HttpPost("delete")]
-        public async Task<ActionResult<AdminUserDTO>> DeleteUser(int id) =>
+        public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> DeleteUser(int id) =>
              Ok(await _service.DeleteById(id));
 
         [HttpGet("getById")]
-        public async Task<ActionResult<AdminUserDTO>> GetUserById(int id) =>
+        public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> GetUserById(int id) =>
             Ok(await _service.GetById(id));
     }
 }
