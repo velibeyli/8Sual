@@ -22,5 +22,9 @@ namespace _8Sual.DTO
             AnswerId = question.AnswerId;
             CategoryId = question.CategoryId;
         }
+        public QuestionDTO()
+        {
+
+        }
     }
 }

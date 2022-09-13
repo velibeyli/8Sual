@@ -1,7 +1,9 @@
 ﻿using _8Sual.DTO;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
+using _8Sual.Validation;
 using _8Sual.Wrappers;
+using FluentValidation;
 
 namespace _8Sual.Services.Implementations
 {
@@ -14,6 +16,9 @@ namespace _8Sual.Services.Implementations
         }
         public async Task<ServiceResponse<UserDTO>> Login(UserDTO userDto)
         {
+            UserValidator validator = new UserValidator();
+            await validator.ValidateAndThrowAsync(userDto);  
+
             var result = await _userRepository.GetByFilter(x => x.Username == userDto.Username && x.Password == userDto.Password);
             if (result is null)
             {

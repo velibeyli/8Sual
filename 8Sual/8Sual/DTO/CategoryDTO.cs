@@ -13,5 +13,9 @@ namespace _8Sual.DTO
             Score = category.Score;
             Questions = category.Questions;
         }
+        public CategoryDTO()
+        {
+
+        }
     }
 }

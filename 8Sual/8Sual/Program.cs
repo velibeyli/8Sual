@@ -1,9 +1,12 @@
 using _8Sual.Db;
+using _8Sual.Middlewares;
 using _8Sual.Repositories.Implementations;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Implementations;
 using _8Sual.Services.Interfaces;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +46,10 @@ ConfigurationManager configuration = builder.Configuration;
 
 builder.Services.AddDbContext<QuestionContext>(x => x.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+var assembly = Assembly.GetExecutingAssembly();
+
+builder.Services.AddValidatorsFromAssembly(assembly);
+
 
 
 
@@ -57,7 +64,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 

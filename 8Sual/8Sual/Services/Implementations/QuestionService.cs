@@ -19,10 +19,10 @@ namespace _8Sual.Services.Implementations
         public async Task<ServiceResponse<QuestionDTO>> Create(QuestionDTO questionDto)
         {
             var result = await _repo.GetByFilter(x => x.Content == questionDto.Content);
-            var resultDto = new QuestionDTO(result);
+            
             if (result != null)
             {
-                return new ServiceResponse<QuestionDTO>(resultDto)
+                return new ServiceResponse<QuestionDTO>(null)
                 { Message = "There is already a question with this content in database", StatusCode = 4000 };
             }
             QuestionAnswer answer = new QuestionAnswer()

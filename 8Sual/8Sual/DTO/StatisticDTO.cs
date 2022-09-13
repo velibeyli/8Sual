@@ -13,5 +13,9 @@ namespace _8Sual.DTO
             Score = statistic.Score;
             CorrectAnswer = statistic.CorrectAnswer;
         }
+        public StatisticDTO()
+        {
+
+        }
     }
 }
