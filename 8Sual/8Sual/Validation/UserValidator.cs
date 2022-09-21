@@ -15,7 +15,7 @@ namespace _8Sual.Validation
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password can not be empty")
                 .NotNull().WithMessage("Password can not be null")
-                .MinimumLength(8).WithMessage("Password lenght must be at least 6 character");
+                .MinimumLength(6).WithMessage("Password lenght must be at least 6 character");
         }
     }
 }

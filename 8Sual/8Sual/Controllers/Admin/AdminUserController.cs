@@ -19,9 +19,10 @@ namespace _8Sual.Controllers.Admin
         public async Task<ActionResult<ServiceResponse<IEnumerable<AdminUserDTO>>>> GetAll() =>
              Ok(await _service.GetAll());
 
-        [HttpPost("create")]
-        public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> CreateUser(AdminUserDTO adminUserDto) =>
-            Ok(await _service.Create(adminUserDto));
+        [HttpPost("register")]
+        public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> Register(AdminUserDTO adminUserDto) =>
+            Ok(await _service.Create(adminUserDto)); // TODO: change name of service method
+
 
         [HttpPost("update")]
         public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> UpdateUser(int id, [FromBody] AdminUserDTO adminUserDto) =>

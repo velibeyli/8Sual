@@ -27,5 +27,8 @@ namespace _8Sual.Controllers.Admin
         public async Task<ActionResult<ServiceResponse<QuestionDTO>>> GetById(int id) =>
             Ok(await _service.GetById(id));
 
+        // TODO: implement delete and update method
+
+
     }
 }

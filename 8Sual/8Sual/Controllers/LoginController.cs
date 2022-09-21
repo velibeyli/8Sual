@@ -3,7 +3,7 @@ using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _8Sual.Controllers.Admin
+namespace _8Sual.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
