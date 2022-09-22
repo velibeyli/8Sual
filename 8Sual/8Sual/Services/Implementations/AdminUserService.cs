@@ -3,15 +3,18 @@ using _8Sual.Model.Admin;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
+using AutoMapper;
 
 namespace _8Sual.Services.Implementations
 {
     public class AdminUserService : IAdminUserService
     {
         private readonly IAdminUserRepository _repo;
-        public AdminUserService(IAdminUserRepository repo)
+        private readonly IMapper _mapper;
+        public AdminUserService(IAdminUserRepository repo,IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse<AdminUserDTO>> Create(AdminUserDTO adminUserDto)
@@ -23,7 +26,7 @@ namespace _8Sual.Services.Implementations
             };
 
             var admin = await _repo.Create(adminUser);
-            var adminDto = new AdminUserDTO(admin);
+            var adminDto = _mapper.Map<AdminUserDTO>(admin);
             return new ServiceResponse<AdminUserDTO>(adminDto) { Message = "Successfully created Admin",StatusCode = 2001};
         }
 
@@ -37,7 +40,7 @@ namespace _8Sual.Services.Implementations
             }
 
             var deletedUser = await _repo.Delete(res);
-            var deletedUserDto = new AdminUserDTO(deletedUser);
+            var deletedUserDto = _mapper.Map<AdminUserDTO>(deletedUser);
             return new ServiceResponse<AdminUserDTO>(deletedUserDto)
             { Message = "Successfully deleted admin",StatusCode = 2000};
         }
@@ -45,7 +48,7 @@ namespace _8Sual.Services.Implementations
         public async Task<ServiceResponse<IEnumerable<AdminUserDTO>>> GetAll()
         {
             List<AdminUser> admins = await _repo.GetAll();
-            var data = admins.Select(x => new AdminUserDTO(x)).ToList();
+            var data = admins.Select(x => _mapper.Map<AdminUserDTO>(x)).ToList();
             return new ServiceResponse<IEnumerable<AdminUserDTO>>(data) { Message = "Data query success", StatusCode = 2000 };
         }
 
@@ -58,7 +61,7 @@ namespace _8Sual.Services.Implementations
                 { Message = "Admin not found", StatusCode = 4000 };
             }
 
-            var resultDto = new AdminUserDTO(result);
+            var resultDto = _mapper.Map<AdminUserDTO>(result);
             return new ServiceResponse<AdminUserDTO>(resultDto)
             { Message = "Successfully operation",StatusCode = 2000};
         }
@@ -80,7 +83,7 @@ namespace _8Sual.Services.Implementations
             };
 
             var updatedAdmin = await _repo.Update(admin);
-            var updatedAdminDto = new AdminUserDTO(updatedAdmin);
+            var updatedAdminDto = _mapper.Map<AdminUserDTO>(result);
 
             return new ServiceResponse<AdminUserDTO>(updatedAdminDto)
             {Message = "Successfully updated admin",StatusCode = 2001 };

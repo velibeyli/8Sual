@@ -3,21 +3,24 @@ using _8Sual.Model;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
+using AutoMapper;
 
 namespace _8Sual.Services.Implementations
 {
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _repo;
-        public CategoryService(ICategoryRepository repo)
+        private readonly IMapper _mapper;
+        public CategoryService(ICategoryRepository repo,IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse<CategoryDTO>> Create(CategoryDTO categoryDto)
         {
             var result = await _repo.GetByFilter(x => x.Name == categoryDto.Name);
-            var resultDto = new CategoryDTO(result);
+            var resultDto = _mapper.Map<CategoryDTO>(result);
             if (result is not null)
             {
                 return new ServiceResponse<CategoryDTO>(resultDto)
@@ -32,7 +35,7 @@ namespace _8Sual.Services.Implementations
             };
 
             var createdCategory = await _repo.Create(category);
-            var createdCategoryDto = new CategoryDTO(createdCategory);
+            var createdCategoryDto = _mapper.Map<CategoryDTO>(createdCategory);
             return new ServiceResponse<CategoryDTO>(createdCategoryDto)
             { Message = "Successfully created category",StatusCode = 2001};
         }
@@ -46,7 +49,7 @@ namespace _8Sual.Services.Implementations
                 { Message = "Category not found",StatusCode = 4000 };
             }
             var deletedCategory = await _repo.Delete(result);
-            var deletedCategoryDto = new CategoryDTO(deletedCategory);
+            var deletedCategoryDto = _mapper.Map<CategoryDTO>(deletedCategory);
             return new ServiceResponse<CategoryDTO>(deletedCategoryDto)
             { Message = "Successfully deleted category",StatusCode = 2000};
         }
@@ -54,7 +57,7 @@ namespace _8Sual.Services.Implementations
         public async Task<ServiceResponse<IEnumerable<CategoryDTO>>> GetAll()
         {
             List<Category> categories = await _repo.GetAll();
-            List<CategoryDTO> categoryDtos = categories.Select(x => new CategoryDTO(x)).ToList();
+            List<CategoryDTO> categoryDtos = categories.Select(x => _mapper.Map<CategoryDTO>(x)).ToList();
             return new ServiceResponse<IEnumerable<CategoryDTO>>(categoryDtos)
             { Message = "Data query success", StatusCode = 2000 };
         }
@@ -68,7 +71,7 @@ namespace _8Sual.Services.Implementations
                 { Message = "Category not found", StatusCode = 4000 };
             }
 
-            var resultDto = new CategoryDTO(result);
+            var resultDto = _mapper.Map<CategoryDTO>(result);
             return new ServiceResponse<CategoryDTO>(resultDto)
             { Message = "Successfully operation",StatusCode = 2000};
         }
@@ -89,7 +92,7 @@ namespace _8Sual.Services.Implementations
             };
 
             var updatedCategory = await _repo.Create(category);
-            var updatedCategoryDto = new CategoryDTO(updatedCategory);
+            var updatedCategoryDto = _mapper.Map<CategoryDTO>(updatedCategory);
             return new ServiceResponse<CategoryDTO>(updatedCategoryDto)
             { Message = "Successfully updated category",StatusCode = 2000};
         }

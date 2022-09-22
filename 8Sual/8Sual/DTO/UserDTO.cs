@@ -6,14 +6,5 @@ namespace _8Sual.DTO
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public UserDTO(User user)
-        {
-            Username = user.Username;
-            Password = user.Password;
-        }
-        public UserDTO()
-        {
-
-        }
     }
 }

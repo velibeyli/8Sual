@@ -3,6 +3,7 @@ using _8Sual.Model;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
+using AutoMapper;
 
 namespace _8Sual.Services.Implementations
 {
@@ -10,10 +11,12 @@ namespace _8Sual.Services.Implementations
     {
         private readonly IQuestionRepository _repo;
         private readonly ICategoryRepository _categoryRepository;
-        public QuestionService(IQuestionRepository repo, ICategoryRepository categoryRepository)
+        private readonly IMapper _mapper;
+        public QuestionService(IQuestionRepository repo, ICategoryRepository categoryRepository,IMapper mapper)
         {
             _repo = repo;
             _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse<QuestionDTO>> Create(QuestionDTO questionDto)
@@ -43,7 +46,7 @@ namespace _8Sual.Services.Implementations
             };
 
             var createdQuestion = await _repo.Create(quest);
-            var createdQuestionDto = new QuestionDTO(createdQuestion);
+            var createdQuestionDto = _mapper.Map<QuestionDTO>(createdQuestion);
             return new ServiceResponse<QuestionDTO>(createdQuestionDto)
             { Message = "Successfully created question",StatusCode = 2001};
         }
@@ -51,7 +54,7 @@ namespace _8Sual.Services.Implementations
         public async Task<ServiceResponse<IEnumerable<QuestionDTO>>> GetAll()
         {
             List<Question> questions = await _repo.GetAll();
-            List<QuestionDTO> questionsDto = questions.Select(x => new QuestionDTO(x)).ToList();
+            List<QuestionDTO> questionsDto = questions.Select(x => _mapper.Map<QuestionDTO>(x)).ToList();
             return new ServiceResponse<IEnumerable<QuestionDTO>>(questionsDto)
             { Message = "Data query success", StatusCode = 2000 };
         }
@@ -65,7 +68,7 @@ namespace _8Sual.Services.Implementations
                 { Message = "Question not found", StatusCode = 4000 };
             }
 
-            var resultDto = new QuestionDTO(result);
+            var resultDto = _mapper.Map<QuestionDTO>(result);
             return new ServiceResponse<QuestionDTO>(resultDto)
             { Message = "Successfully operation"};
         }

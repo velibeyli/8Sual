@@ -3,21 +3,24 @@ using _8Sual.Model;
 using _8Sual.Repositories.Interfaces;
 using _8Sual.Services.Interfaces;
 using _8Sual.Wrappers;
+using AutoMapper;
 
 namespace _8Sual.Services.Implementations
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _repo;
-        public UserService(IUserRepository repo)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepository repo,IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse<UserDTO>> Register(UserDTO userDto)
         {
             User result = await _repo.GetByFilter(x => x.Username == userDto.Username);
-            UserDTO resultDto = new UserDTO(result);
+            UserDTO resultDto = _mapper.Map<UserDTO>(result);
 
             if (result is not null)
             {
@@ -31,7 +34,7 @@ namespace _8Sual.Services.Implementations
             };
 
             var createdUser = await _repo.Create(user);
-            var createdUserDto = new UserDTO(createdUser);
+            var createdUserDto = _mapper.Map<UserDTO>(createdUser);
             return new ServiceResponse<UserDTO>(createdUserDto) { Message = "User successfully created", StatusCode = 2001 };
         }
 
@@ -45,7 +48,7 @@ namespace _8Sual.Services.Implementations
             }
 
             var deletedUser = await _repo.Delete(result);
-            var deletedUserDto = new UserDTO(deletedUser);
+            var deletedUserDto = _mapper.Map<UserDTO>(deletedUser);
             return new ServiceResponse<UserDTO>(deletedUserDto) { Message = "User successfully deleted", StatusCode = 2000 };
         }
 
@@ -58,14 +61,14 @@ namespace _8Sual.Services.Implementations
                 { Message = "User not found", StatusCode = 4000 };
             }
 
-            var resultDto = new UserDTO(result);
+            var resultDto = _mapper.Map<UserDTO>(result);
             return new ServiceResponse<UserDTO>(resultDto) { Message = "Successfully operation", StatusCode = 2000 };
         }
 
         public async Task<ServiceResponse<IEnumerable<UserDTO>>> GetAll()
         {
             List<User> users = await _repo.GetAll();
-            List<UserDTO> userDtos = users.Select(x => new UserDTO(x)).ToList();
+            List<UserDTO> userDtos = users.Select(x => _mapper.Map<UserDTO>(x)).ToList();
             return new ServiceResponse<IEnumerable<UserDTO>>(userDtos)
             { Message = "Data Query Success", StatusCode = 2000 };
         }

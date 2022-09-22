@@ -1,4 +1,5 @@
 using _8Sual.Db;
+using _8Sual.Mapping;
 using _8Sual.Middlewares;
 using _8Sual.Repositories.Implementations;
 using _8Sual.Repositories.Interfaces;
@@ -50,7 +51,8 @@ var assembly = Assembly.GetExecutingAssembly();
 
 builder.Services.AddValidatorsFromAssembly(assembly);
 
-
+// configure AutoMapper
+builder.Services.AddAutoMapper(typeof(MapProfile));
 
 
 var app = builder.Build();
