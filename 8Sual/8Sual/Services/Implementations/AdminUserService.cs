@@ -17,7 +17,7 @@ namespace _8Sual.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<AdminUserDTO>> Create(AdminUserDTO adminUserDto)
+        public async Task<ServiceResponse<AdminUserDTO>> Register(AdminUserDTO adminUserDto)
         {
             AdminUser adminUser = new AdminUser()
             {

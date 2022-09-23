@@ -51,6 +51,21 @@ namespace _8Sual.Services.Implementations
             { Message = "Successfully created question",StatusCode = 2001};
         }
 
+        public async Task<ServiceResponse<QuestionDTO>> Delete(int id)
+        {
+            var result = await _repo.GetByFilter(x => x.Id == id);
+            if(result is null)
+            {
+                return new ServiceResponse<QuestionDTO>(null)
+                { Message = "Question not found.",StatusCode = 4000 };
+            }
+
+            var deletedQuestion = await _repo.Delete(result);
+            var deletedQuestionDto = _mapper.Map<QuestionDTO>(deletedQuestion);
+            return new ServiceResponse<QuestionDTO>(deletedQuestionDto)
+            { Message = "Question was successfully deleted.", StatusCode = 2004 };
+        }
+
         public async Task<ServiceResponse<IEnumerable<QuestionDTO>>> GetAll()
         {
             List<Question> questions = await _repo.GetAll();
@@ -71,6 +86,34 @@ namespace _8Sual.Services.Implementations
             var resultDto = _mapper.Map<QuestionDTO>(result);
             return new ServiceResponse<QuestionDTO>(resultDto)
             { Message = "Successfully operation"};
+        }
+
+        public async Task<ServiceResponse<QuestionDTO>> Update(int id, QuestionDTO questionDto)
+        {
+            var result = await _repo.GetByFilter(x => x.Id == id);
+            if(result is null)
+            {
+                return new ServiceResponse<QuestionDTO>(null)
+                { Message = "Question not found!", StatusCode = 4000 };
+            }
+
+            Question question = new Question()
+            {
+                Id = id,
+                Content = questionDto.Content,
+                FirstAnswer = questionDto.FirstAnswer,
+                SecondAnswer = questionDto.SecondAnswer,
+                ThirdAnswer = questionDto.ThirdAnswer,
+                FourthAnswer = questionDto.FourthAnswer,
+                AnswerId = questionDto.AnswerId,
+                CategoryId = questionDto.CategoryId
+            };
+
+            var updatedQuestion = await _repo.Update(question);
+            var updatedQuestionDto = _mapper.Map<QuestionDTO>(updatedQuestion);
+
+            return new ServiceResponse<QuestionDTO>(updatedQuestionDto)
+            { Message = "Question was successfully updated!", StatusCode = 2004 };
         }
     }
 }

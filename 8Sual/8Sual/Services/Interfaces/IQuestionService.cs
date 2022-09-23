@@ -8,5 +8,7 @@ namespace _8Sual.Services.Interfaces
         Task<ServiceResponse<IEnumerable<QuestionDTO>>> GetAll();
         Task<ServiceResponse<QuestionDTO>> Create(QuestionDTO questionDto);
         Task<ServiceResponse<QuestionDTO>> GetById(int id);
+        Task<ServiceResponse<QuestionDTO>> Update(int id, QuestionDTO questionDto);
+        Task<ServiceResponse<QuestionDTO>> Delete(int id);
     }
 }

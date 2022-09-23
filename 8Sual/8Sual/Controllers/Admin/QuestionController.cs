@@ -27,7 +27,15 @@ namespace _8Sual.Controllers.Admin
         public async Task<ActionResult<ServiceResponse<QuestionDTO>>> GetById(int id) =>
             Ok(await _service.GetById(id));
 
-        // TODO: implement delete and update method
+        [HttpPut("update")]
+        public async Task<ActionResult<ServiceResponse<QuestionDTO>>> Update(int id, QuestionDTO questionDTO) =>
+            Ok(await _service.Update(id,questionDTO));
+
+        [HttpDelete("delete")]
+        public async Task<ActionResult<ServiceResponse<QuestionDTO>>> Delete(int id)=>
+            Ok(await _service.Delete(id));
+
+        // TODO: implement delete and update method (solved)
 
 
     }

@@ -21,7 +21,7 @@ namespace _8Sual.Controllers.Admin
 
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<AdminUserDTO>>> Register(AdminUserDTO adminUserDto) =>
-            Ok(await _service.Create(adminUserDto)); // TODO: change name of service method
+            Ok(await _service.Register(adminUserDto)); // TODO: change name of service method (solved)
 
 
         [HttpPost("update")]
