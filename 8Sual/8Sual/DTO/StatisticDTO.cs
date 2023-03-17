@@ -7,11 +7,5 @@ namespace _8Sual.DTO
         public DateTime Gamedate { get; set; }
         public int CorrectAnswer { get; set; }
         public int Score { get; set; }
-        public StatisticDTO(Statistic statistic)
-        {
-            Gamedate = statistic.Gamedate;
-            Score = statistic.Score;
-            CorrectAnswer = statistic.CorrectAnswer;
-        }
     }
 }

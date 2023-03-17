@@ -18,6 +18,6 @@ namespace _8Sual.Model
         public QuestionAnswer Answer { get; set; }
         [JsonIgnore]
         public Category Category { get; set; }
-       
+
     }
 }

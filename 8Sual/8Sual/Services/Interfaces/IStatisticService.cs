@@ -6,7 +6,7 @@ namespace _8Sual.Services.Interfaces
     public interface IStatisticService
     {
         Task<ServiceResponse<IEnumerable<StatisticDTO>>> GetAll();
-        Task<StatisticDTO> GetById(int id);
-        Task<StatisticDTO> Create(StatisticDTO statisticDto);
+        Task<ServiceResponse<StatisticDTO>> GetById(int id);
+        Task<ServiceResponse<StatisticDTO>> Create(StatisticDTO statisticDto);
     }
 }
