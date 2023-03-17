@@ -11,6 +11,5 @@ namespace _8Sual.DTO
         public string FourthAnswer { get; set; }
         public int CategoryId { get; set; }
         public int AnswerId { get; set; }
-        public string AnswerContent { get; set; }
     }
 }

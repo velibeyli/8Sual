@@ -33,7 +33,7 @@ namespace _8Sual.Middlewares
             if (exception.GetType() == typeof(ValidationException))
             {
                 serviceResponse.StatusCode = (int)HttpStatusCode.BadRequest;
-                
+
 
                 var validationError = (List<FluentValidation.Results.ValidationFailure>)((ValidationException)exception).Errors;
                 string[] errors = validationError.Select(x => x.ErrorMessage).ToArray();
@@ -45,7 +45,7 @@ namespace _8Sual.Middlewares
                 serviceResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var errorMessage = (exception.InnerException != null) ? exception.InnerException.Message : exception.Message;
-                serviceResponse.Errors[0] = errorMessage;
+                serviceResponse.Errors = new string[] {errorMessage};
 
             }
 

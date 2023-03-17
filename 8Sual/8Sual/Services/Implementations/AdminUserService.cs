@@ -49,7 +49,8 @@ namespace _8Sual.Services.Implementations
         {
             List<AdminUser> admins = await _repo.GetAll();
             var data = admins.Select(x => _mapper.Map<AdminUserDTO>(x)).ToList();
-            return new ServiceResponse<IEnumerable<AdminUserDTO>>(data) { Message = "Data query success", StatusCode = 2000 };
+            return new ServiceResponse<IEnumerable<AdminUserDTO>>(data)
+            { Message = "Data query success", StatusCode = 2000 };
         }
 
         public async Task<ServiceResponse<AdminUserDTO>> GetById(int id)

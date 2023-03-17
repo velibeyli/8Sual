@@ -28,10 +28,6 @@ namespace _8Sual.Services.Implementations
                 return new ServiceResponse<QuestionDTO>(null)
                 { Message = "There is already a question with this content in database", StatusCode = 4000 };
             }
-            QuestionAnswer answer = new QuestionAnswer()
-            {
-                AnswerContent = questionDto.AnswerContent
-            };
 
 
             Question quest = new Question()
@@ -42,7 +38,6 @@ namespace _8Sual.Services.Implementations
                 ThirdAnswer = questionDto.ThirdAnswer,
                 FourthAnswer = questionDto.FourthAnswer,
                 CategoryId = questionDto.CategoryId,
-                Answer = answer
             };
 
             var createdQuestion = await _repo.Create(quest);
